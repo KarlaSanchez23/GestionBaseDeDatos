@@ -1,0 +1,175 @@
+/*==============================================================*/
+/* Table: BENEFICIARIO                                          */
+/*==============================================================*/
+create table BENEFICIARIO (
+   IDBENEFICIARIO       INT4                 not null,
+   IDSEGURO             INT4                 not null,
+   NOMBENEF             VARCHAR(50)          not null,
+   APEBENEF             VARCHAR(50)          not null,
+   EDAD                 VARCHAR(10)          not null,
+   PARENTEZCO           VARCHAR(20)          not null,
+   constraint PK_BENEFICIARIO primary key (IDBENEFICIARIO)
+);
+
+insert into BENEFICIARIO values ('1','3','Julio','Pilligua','45','Hermano');
+insert into BENEFICIARIO values ('2','1','Marcos','Zamora','16','Hijo');
+insert into BENEFICIARIO values ('3','2','Camila','Macias ','15','Sobrina');
+insert into BENEFICIARIO values ('4','6','Juan','Santana','26','Hermano');
+insert into BENEFICIARIO values ('5','4','Jacobo','Mora','34','Hermano');
+insert into BENEFICIARIO values ('6','8','Melanie','Rivas','19','Hija');
+insert into BENEFICIARIO values ('7','5','Jesus','Rivera','29','Hermano');
+insert into BENEFICIARIO values ('8','7','Mercedes','Santos','54','Tia');
+insert into BENEFICIARIO values ('9','13','Katalina','Larenas','14','Hermana');
+insert into BENEFICIARIO values ('10','12','Alexander','Zavala','25','Hermana');
+insert into BENEFICIARIO values ('11','9','Roberto','Quiroz','30','Hijo');
+insert into BENEFICIARIO values ('12','10','Melissa','Mendoza','23','Hija');
+insert into BENEFICIARIO values ('13','11','Rubén','Zambrano','17','Hijo');
+
+
+
+
+
+/*==============================================================*/
+/* Table: CLIENTE                                               */
+/*==============================================================*/
+create table CLIENTE (
+   IDCLIENTE            INT4                 not null,
+   CLI_NOMBRE           VARCHAR(50)          not null,
+   CLI_APELLIDO         VARCHAR(50)          not null,
+   FECHA_NACIMIENTO     DATE          not null,
+   SEXO                 VARCHAR(20)          not null,
+   ANTECEDENTES_FAMILIARES VARCHAR(50)          not null,
+   OCUPACION            VARCHAR(50)          not null,
+   CIUDAD               VARCHAR(50)          not null,
+   constraint PK_CLIENTE primary key (IDCLIENTE)
+);
+
+insert into CLIENTE values ('1','Carlos','Martinez Sornoza','23/04/1994','Masculino','Ninguno','Arquitecto','Manta');
+insert into CLIENTE values ('2','Ximena','Rosales Delgado','03/06/1990','Femenino','Hepatitis','Administradora','Montecristi');
+insert into CLIENTE values ('3','Carla','Anchundia Mero ','15/09/1985','Femenino','Ninguno','Licenciada','Crucita');
+insert into CLIENTE values ('4','Martín','Pico Sánchez','26/11/1994','Masculino','Cirrosis','Policia','Montecristi');
+insert into CLIENTE values ('5','Roxana','Martinez Sornoza','23/07/1990','Femenino','Ninguno','Arquitecto','Manta');
+insert into CLIENTE values ('6','Francisco','Rosales Delgado','01/09/1971','Masculino','Hepatitis','Arquitecto','Montecristi');
+insert into CLIENTE values ('7','Darwin','Hidalgo Macías','15/05/2002','Masculino','Ninguno','Arquitecto','Manta');
+insert into CLIENTE values ('8','Amalia','Mero Palma','27/02/1994','Femenino','Ninguno','Arquitecto','San Mateo');
+insert into CLIENTE values ('9','Sabrina','Martinez Sornoza','25/10/2000','Femenino','Ninguno','Arquitecto','Manta');
+insert into CLIENTE values ('10','Alejandra','Delgado Hernandez','23/04/1985','Femenino','Ninguno','Arquitecto','Manta');
+insert into CLIENTE values ('11','Fabian','Mero Palma','23/04/1971','Masculino','Ninguno','Arquitecto','San Mateo');
+insert into CLIENTE values ('12','Angelo','Mendoza Garcia','23/06/1983','Masculino','Ninguno','Arquitecto','Manta');
+insert into CLIENTE values ('13','Guadalupe','Zambrano Toala','22/08/2002','Femenino','Ninguno','Arquitecto','San Lorenzo');
+
+
+
+
+/*==============================================================*/
+/* Table: DETALLE_SEGURO                                        */
+/*==============================================================*/
+create table DETALLE_SEGURO (
+   ID_DETALLE           INT4                 not null,
+   IDCLIENTE            INT4                 not null,
+   IDSEGURO             INT4                 not null,
+   FECHA_INICIO         DATE          not null,
+   FECHA_FIN            DATE          not null,
+   constraint PK_DETALLE_SEGURO primary key (ID_DETALLE)
+);
+
+
+insert into DETALLE_SEGURO values ('1','2','1','10/07/2008','10/07/2022');
+insert into DETALLE_SEGURO values ('2','3','3','23/05/2003','12/05/2021');
+insert into DETALLE_SEGURO values ('3','5','4','11/03/2008','22/06/2025');
+insert into DETALLE_SEGURO values ('4','1','2','13/09/2012','15/09/2022');
+insert into DETALLE_SEGURO values ('5','4','5','16/08/2012','19/11/2021');
+insert into DETALLE_SEGURO values ('6','8','7','19/07/2012','11/04/2027');
+insert into DETALLE_SEGURO values ('7','6','6','12/07/1989','25/12/2024');
+insert into DETALLE_SEGURO values ('8','9','9','21/07/2020','14/05/2022');
+insert into DETALLE_SEGURO values ('9','10','10','25/07/2003','04/08/2023');
+insert into DETALLE_SEGURO values ('10','13','8','14/07/2020','20/10/2026');
+insert into DETALLE_SEGURO values ('11','7','13','01/07/2020','29/03/2030');
+insert into DETALLE_SEGURO values ('12','11','12','15/07/1989','16/12/2025');
+insert into DETALLE_SEGURO values ('13','12','11','03/07/2001','13/03/2023');
+
+
+
+
+
+
+/*==============================================================*/
+/* Table: TIPO_SEGURO                                           */
+/*==============================================================*/
+create table TIPO_SEGURO (
+   IDTIPOSEGURO         INT4                 not null,
+   IDCLIENTE            INT4                 not null,
+   NOM_TIPO             VARCHAR(50)          not null,
+   DESCRIPCION          VARCHAR(50)          not null,
+   constraint PK_TIPO_SEGURO primary key (IDTIPOSEGURO)
+);
+
+insert into TIPO_SEGURO values ('1', '2', 'Seguro de vida temporal', 'Por corto tiempo');
+insert into TIPO_SEGURO values ('2', '3', 'Seguro de vida jubilacion', 'Por largo tiempo');
+insert into TIPO_SEGURO values ('3', '1', 'Seguro de vida mixtos', 'Incluye servicio de vida temporal y de jubilacion');
+insert into TIPO_SEGURO values ('4', '6', 'Seguro de vida temporal', 'Por corto tiempo');
+insert into TIPO_SEGURO values ('5', '5', 'Seguro de vida jubilacion', 'Por largo tiempo');
+insert into TIPO_SEGURO values ('6', '4', 'Seguro de vida mixtos', 'Incluye servicio de vida temporal y de jubilacion');
+insert into TIPO_SEGURO values ('7', '8', 'Seguro de vida temporal', 'Por corto tiempo');
+insert into TIPO_SEGURO values ('8', '7', 'Seguro de vida temporal', 'Por corto tiempo');
+insert into TIPO_SEGURO values ('9', '10', 'Seguro de vida mixtos', 'Incluye servicio de vida temporal y de jubilacion');
+insert into TIPO_SEGURO values ('10', '13', 'Seguro de vida temporal', 'Por corto tiempo');
+insert into TIPO_SEGURO values ('11', '9', 'Seguro de vida temporal', 'Por corto tiempo');
+insert into TIPO_SEGURO values ('12', '12', 'Seguro de vida mixtos', 'Incluye servicio de vida temporal y de jubilacion');
+insert into TIPO_SEGURO values ('13', '11', 'Seguro de vida temporal', 'Por corto tiempo');
+
+
+
+
+
+/*==============================================================*/
+/* Table: SEGURO                                                */
+/*==============================================================*/
+create table SEGURO (
+   IDSEGURO             INT4                 not null,
+   IDTIPOSEGURO         INT4                 not null,
+   COSTO                VARCHAR(20)          not null,
+   DOCUMENTOS_SOLICITADOS VARCHAR(10)          not null,
+   constraint PK_SEGURO primary key (IDSEGURO)
+);
+
+insert into SEGURO values ('1', '1', '600', 'SI');
+insert into SEGURO values ('2', '3', '500', 'SI');
+insert into SEGURO values ('3', '5', '800', 'SI');
+insert into SEGURO values ('4', '2', '600', 'SI');
+insert into SEGURO values ('5', '6', '500', 'SI');
+insert into SEGURO values ('6', '8', '800', 'SI');
+insert into SEGURO values ('7', '11', '600', 'SI');
+insert into SEGURO values ('8', '4', '500', 'SI');
+insert into SEGURO values ('9', '13', '800', 'SI');
+insert into SEGURO values ('10', '7', '600', 'SI');
+insert into SEGURO values ('11', '9', '500', 'SI');
+insert into SEGURO values ('12', '12', '800', 'SI');
+insert into SEGURO values ('13', '10', '600', 'SI');
+
+
+
+alter table BENEFICIARIO
+   add constraint FK_BENEFICI_SEGURO_BE_SEGURO foreign key (IDSEGURO)
+      references SEGURO (IDSEGURO)
+      on delete restrict on update restrict;
+
+alter table DETALLE_SEGURO
+   add constraint FK_DETALLE__CLIENTE_D_CLIENTE foreign key (IDCLIENTE)
+      references CLIENTE (IDCLIENTE)
+      on delete restrict on update restrict;
+
+alter table DETALLE_SEGURO
+   add constraint FK_DETALLE__SEGURO_DE_SEGURO foreign key (IDSEGURO)
+      references SEGURO (IDSEGURO)
+      on delete restrict on update restrict;
+
+alter table SEGURO
+   add constraint FK_SEGURO_TIPOSEGUR_TIPO_SEG foreign key (IDTIPOSEGURO)
+      references TIPO_SEGURO (IDTIPOSEGURO)
+      on delete restrict on update restrict;
+
+alter table TIPO_SEGURO
+   add constraint FK_TIPO_SEG_CLIENTE_T_CLIENTE foreign key (IDCLIENTE)
+      references CLIENTE (IDCLIENTE)
+      on delete restrict on update restrict;
