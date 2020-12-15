@@ -1,0 +1,72 @@
+--¿Cuántos clientes han adquirido un seguro de vida en este año? ¿Cuáles son de género femenino? 
+Select
+cliente.cli_nombre,
+cliente.cli_apellido,
+cliente.sexo,
+detalle_seguro.fecha_inicio
+from
+cliente
+inner join detalle_seguro on cliente.idcliente = detalle_seguro.idcliente
+where
+detalle_seguro.fecha_inicio between '01/01/2020' and '31/12/2020' and 
+cliente.sexo='Femenino'
+
+
+
+
+
+
+--¿Cuántas familias y miembros de una familia en base al mismo apellido cuentan con un seguro de vida? 
+
+SELECT  cliente.cli_apellido FROM cliente
+    WHERE cli_apellido IN (
+        SELECT cli_apellido FROM cliente 
+            GROUP BY cliente.cli_apellido
+            HAVING COUNT(cli_apellido)>1
+    )
+ORDER BY cli_apellido ASC
+
+
+-- Segunda forma
+SELECT cliente.cli_apellido, 
+COUNT (cli_apellido) as Integrantes_Familia 
+FROM cliente 
+GROUP BY cliente.cli_apellido 
+HAVING COUNT(cli_apellido)>1
+ORDER BY Integrantes_Familia ASC;
+
+
+
+
+
+
+
+--¿Cuántos beneficiarios son hijos de los clientes? ¿Cuántos son menores de edad? 
+Select
+beneficiario.nombenef,
+beneficiario.apebenef,
+beneficiario.parentezco,
+beneficiario.edad
+from
+beneficiario
+where
+beneficiario.parentezco= 'Hijo' and beneficiario.edad <18
+
+
+
+
+
+
+
+--¿Cuántos clientes son de otra ciudad excepto Manta? y ¿Qué tipo de seguro adquirieron?
+select 
+cliente.cli_nombre,
+cliente.cli_apellido,
+cliente.ciudad,
+tipo_seguro.nom_tipo,
+seguro.costo
+
+from cliente
+inner join tipo_seguro on cliente.idcliente = tipo_seguro.idcliente
+inner join seguro on tipo_seguro.idtiposeguro =seguro.idtiposeguro
+  where cliente.ciudad<>'Manta';
