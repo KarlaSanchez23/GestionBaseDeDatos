@@ -1,0 +1,12 @@
+-- Beneficiarios que recibieron entre 100.000 a 150.000 dolares entre las fechas 01/03/2020 y 30/05/2020
+Select
+BENEFICIARIO.nombre,
+BENEFICIARIO.apellido,
+PAGO.fecha_pago,
+PAGO.cantidad_pago
+from
+public.BENEFICIARIO,
+public.PAGO
+where
+BENEFICIARIO.idbeneficiario = PAGO.idpago and PAGO.cantidad_pago between '100000' and '150000'
+and PAGO.fecha_pago between '01/03/2020' and '30/05/2020';
