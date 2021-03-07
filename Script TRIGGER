@@ -1,0 +1,35 @@
+--CREAR LA TABLA PARA EL TRIGGER
+create table FALLECIDOS(
+	Codigo_fa integer,
+	Nombre_Fa character varying
+)
+
+
+
+Select * from CLIENTE
+Select * from FALLECIDOS
+
+
+
+--crear una funcion que retorne el trigger
+create or replace function insertar_trigger() Returns trigger AS $insertar$
+declare begin
+-- Antes de que elimine el registro, lo guarde en la tabla fallecidos
+	insert into FALLECIDOS values (old.idcliente, old.cli_nombre);
+	return null;
+end;
+$insertar$ language plpgsql;
+
+
+
+
+
+-- creación del trigger despues de eliminar el registro de la tabla cliente de cada fila
+create trigger insertar_fallecidos after delete
+on CLIENTE for each row
+-- llamamos a la función para que realice la acción
+execute procedure insertar_trigger();
+
+
+
+delete from CLIENTE where idcliente='3';
