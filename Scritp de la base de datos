@@ -1,0 +1,121 @@
+/*==============================================================*/
+/* Table: BENEFICIARIO                                          */
+/*==============================================================*/
+create table BENEFICIARIO (
+   IDBENEFICIARIO       INT4                 not null,
+   IDCLIENTE            INT4                 not null,
+   IDPAGO               INT4                 not null,
+   NOMBRE               VARCHAR(30)          not null,
+   APELLIDO             VARCHAR(30)          not null,
+   PARENTEZCO           VARCHAR(30)          not null,
+   BENEF_FECHA_NACIM    DATE                 not null,
+   constraint PK_BENEFICIARIO primary key (IDBENEFICIARIO)
+);
+
+insert into BENEFICIARIO values ('1','3','2','Juan','Valdez','Hermano','23/09/1990');
+insert into BENEFICIARIO values ('2','1','4','Hernan','Sanchez','Padre','29/04/1971');
+insert into BENEFICIARIO values ('3','5','1','Paula','Romero','Hija','15/02/1999');
+insert into BENEFICIARIO values ('4','2','6','Pamela','Moreira','Hija','09/11/1993');
+insert into BENEFICIARIO values ('5','7','3','Mario','Palma','Hijo','21/06/2000');
+insert into BENEFICIARIO values ('6','4','7','David','Solorzano','Hermano','01/12/1990');
+insert into BENEFICIARIO values ('7','6','5','Lucia','Vera','Madre','29/03/1987');
+
+/*==============================================================*/
+/* Table: CLIENTE                                               */
+/*==============================================================*/
+create table CLIENTE (
+   IDCLIENTE            INT4                 not null,
+   IDTIPOSEGURO         INT4                 not null,
+   CLI_NOMBRE           VARCHAR(30)          not null,
+   CLI_APELLIDO         VARCHAR(30)          not null,
+   FECHA_NACIMIENTO     DATE                 not null,
+   SEXO                 VARCHAR(20)          not null,
+   OCUPACION            VARCHAR(20)          not null,
+   CIUDAD               VARCHAR(20)          not null,
+   constraint PK_CLIENTE primary key (IDCLIENTE)
+);
+
+insert into CLIENTE values ('1','4','Javier','Sanchez','05/03/1980','Masculino', 'Abogado', 'Manta');
+insert into CLIENTE values ('2','2','Gustavo','Moreira','23/11/1985','Masculino', 'Medico', 'Montecristi');
+insert into CLIENTE values ('3','6','Ivonne','Valdez','11/05/1993','Femenino', 'Ingeniera', 'Montecristi');
+insert into CLIENTE values ('4','1','Martha','Solorzano','25/01/1991','Femenino', 'Psicologa', 'Manta');
+insert into CLIENTE values ('5','3','Sabrina','Romero','12/11/1975','Femenino', 'Doctora', 'Manta');
+insert into CLIENTE values ('6','7','Manuel','Vera','02/07/1995','Masculino', 'Arquitecto', 'Montecristi');
+insert into CLIENTE values ('7','5','Juan','Palma','25/12/1975','Masculino', 'Abogado', 'Manta');
+
+/*==============================================================*/
+/* Table: DETALLE_SEGURO                                        */
+/*==============================================================*/
+create table DETALLE_SEGURO (
+   ID_DETALLE           INT4                 not null,
+   IDCLIENTE            INT4                 not null,
+   FECHA_INICIO         DATE                 not null,
+   FECHA_FIN            DATE                 not null,
+   constraint PK_DETALLE_SEGURO primary key (ID_DETALLE)
+);
+
+insert into DETALLE_SEGURO values ('1','2','22/02/2010','22/02/2020');
+insert into DETALLE_SEGURO values ('2','5','15/04/2009','15/04/2020');
+insert into DETALLE_SEGURO values ('3','1','11/10/2011','11/10/2020');
+insert into DETALLE_SEGURO values ('4','3','09/05/2007','09/05/2020');
+insert into DETALLE_SEGURO values ('5','7','06/06/2002','06/06/2020');
+insert into DETALLE_SEGURO values ('6','4','25/11/2010','25/11/2020');
+insert into DETALLE_SEGURO values ('7','6','10/09/2008','10/09/2020');
+
+/*==============================================================*/
+/* Table: PAGO                                                  */
+/*==============================================================*/
+create table PAGO (
+   IDPAGO               INT4                 not null,
+   TIPO_PAGO            VARCHAR(30)          not null,
+   FECHA_PAGO           DATE                 not null,
+   CANTIDAD_PAGO        NUMERIC(10)          not null,
+   constraint PK_PAGO primary key (IDPAGO)
+);
+
+insert into PAGO values ('1','Cheque','07/03/2020','100000');
+insert into PAGO values ('2','Transferencia','30/04/2020','150000');
+insert into PAGO values ('3','Transferencia','26/10/2020','200000');
+insert into PAGO values ('4','Efectivo','24/05/2020','100000');
+insert into PAGO values ('5','Cheque','06/06/2020','250000');
+insert into PAGO values ('6','Cheque','09/12/2020','200000');
+insert into PAGO values ('7','Efectivo','25/09/2020','150000');
+
+/*==============================================================*/
+/* Table: TIPO_SEGURO                                           */
+/*==============================================================*/
+create table TIPO_SEGURO (
+   IDTIPOSEGURO         INT4                 not null,
+   TIPO_NOMBRE          VARCHAR(30)          not null,
+   COSTO                INT4                 not null,
+   DOCUMENTOS           VARCHAR(30)          not null,
+   constraint PK_TIPO_SEGURO primary key (IDTIPOSEGURO)
+);
+
+insert into TIPO_SEGURO values ('1','Entera','7000','Si');
+insert into TIPO_SEGURO values ('2','Temporal','5000','Si');
+insert into TIPO_SEGURO values ('3','Entera','7000','Si');
+insert into TIPO_SEGURO values ('4','Entera','8000','Si');
+insert into TIPO_SEGURO values ('5','Temporal','5000','Si');
+insert into TIPO_SEGURO values ('6','Temporal','5000','Si');
+insert into TIPO_SEGURO values ('7','Entera','8000','Si');
+
+alter table BENEFICIARIO
+   add constraint FK_BENEFICI_RELATIONS_CLIENTE foreign key (IDCLIENTE)
+      references CLIENTE (IDCLIENTE)
+      on delete restrict on update restrict;
+
+alter table BENEFICIARIO
+   add constraint FK_BENEFICI_RELATIONS_PAGO foreign key (IDPAGO)
+      references PAGO (IDPAGO)
+      on delete restrict on update restrict;
+
+alter table CLIENTE
+   add constraint FK_CLIENTE_RELATIONS_TIPO_SEG foreign key (IDTIPOSEGURO)
+      references TIPO_SEGURO (IDTIPOSEGURO)
+      on delete restrict on update restrict;
+
+alter table DETALLE_SEGURO
+   add constraint FK_DETALLE__RELATIONS_CLIENTE foreign key (IDCLIENTE)
+      references CLIENTE (IDCLIENTE)
+      on delete restrict on update restrict;
