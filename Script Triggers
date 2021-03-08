@@ -1,0 +1,31 @@
+-- Crear un trigger que impida ingresar 2 beneficiarios en un cliente
+-- Crear la función
+CREATE FUNCTION ingre_benef() returns trigger AS $ingresar_benef$
+	BEGIN
+		IF new.nombre is not null then
+			RAISE EXCEPTION 'No se puede agregar 2 beneficiarios para un cliente';
+		END IF;
+	END;
+$ingresar_benef$ LANGUAGE plpgsql;
+
+
+
+
+-- Crear el trigger
+-- El trigger se va a disparar antes de insertar en la tabla beneficiario
+CREATE TRIGGER insert_benef BEFORE INSERT ON BENEFICIARIO
+--Nivel de fila	(Cuando se inserte una fila)
+	FOR EACH ROW 
+-- Se ejecuta el procedimiento de la función
+	EXECUTE PROCEDURE ingre_benef();
+
+
+
+
+Select * from BENEFICIARIO
+
+
+
+--Insertamos un nuevo beneficiario en un un id de cliente ya existente
+insert into BENEFICIARIO values ('8','4','7','Marcos','Santos','Hermano','14/03/1999');
+
