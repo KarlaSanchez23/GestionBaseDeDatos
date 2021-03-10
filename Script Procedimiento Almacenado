@@ -1,16 +1,14 @@
--- Crear un procedimiento almacenado que muestre el nombre, apellido, parentezco y fecha de nacimiento
--- que ha recibido el beneficiario de un cliente que se le ingrese.
+--procedimiento almacenado de muestre el numero de asegurados en cualquier tipo de seguro, usar la instrucción 
+--call para llamar al procedimiento
 
-
--- creamos el procedimiento almacenado
-create procedure detalle_benef
---indicamos el parámetro de entrada (el que ingresaremos para realizar la muestra)
-@cli_nombre varchar(30)
-as
-	select nombre, apellido, parentezco, benef_fecha_nacim
-	from BENEFICIARIO where idbeneficiario=( 
-		select idcliente from CLIENTE
-		where cli_nombre=@cli_nombre)
-go
-
-detalle_benef 'Juan'
+delimiter //
+ create procedure asegurados(in dato varchar(30))
+ begin
+    select count(*) as NumeroDeAsegurados from TIPO_SEGURO where dato like tipo_nombre ;
+ end //
+ 
+ delimiter ;
+ 
+ 
+ 
+ call asegurados('Gold');
