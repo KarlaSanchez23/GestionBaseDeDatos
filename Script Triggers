@@ -1,31 +1,41 @@
--- Crear un trigger que impida ingresar 2 beneficiarios en un cliente
--- Crear la función
-CREATE FUNCTION ingre_benef() returns trigger AS $ingresar_benef$
-	BEGIN
-		IF new.nombre is not null then
-			RAISE EXCEPTION 'No se puede agregar 2 beneficiarios para un cliente';
-		END IF;
-	END;
-$ingresar_benef$ LANGUAGE plpgsql;
+--Cuando fallece un cliente, por politica de la empresa en la base de datos no se puede eliminar
+--al mismo definitivamente por determinados periodos, pero tampoco es ético dejar el cliente muerto en el registro 
+--de clientes, para ello, cree un trigger que al eliminar un cliente fallecido, se almacene en otra tabla.
+
+-- crear la funcion que retorne el trigger
+create or replace function insertar_trigger() RETURNS TRIGGER AS $insertar$
+declare begin
+--antes de que elimine el registro, lo guarde en la tabla fallecidos
+	insert into FALLECIDOS values (old.idcliente, old.cli_nombre, old.fecha_nacimiento,old.ciudad);
+	return null;
+end;
+
+$insertar$ language plpgsql;
+
+--crear el trigger
+create trigger insertar_fallecidos before delete
+on cliente for each row
+--llamar a la función
+execute procedure insertar_trigger();
+
+delete from cliente where idcliente='6';
 
 
 
+create table fallecidos(
+codigo_fa int not null,
+nombre_fa varchar (30),
+fecha_nacim date,
+ciudad varchar(20)
 
--- Crear el trigger
--- El trigger se va a disparar antes de insertar en la tabla beneficiario
-CREATE TRIGGER insert_benef BEFORE INSERT ON BENEFICIARIO
---Nivel de fila	(Cuando se inserte una fila)
-	FOR EACH ROW 
--- Se ejecuta el procedimiento de la función
-	EXECUTE PROCEDURE ingre_benef();
-
+);
 
 
 
-Select * from BENEFICIARIO
+Select * from cliente
 
 
 
---Insertamos un nuevo beneficiario en un un id de cliente ya existente
-insert into BENEFICIARIO values ('8','4','7','Marcos','Santos','Hermano','14/03/1999');
+Select * from fallecidos
+
 
