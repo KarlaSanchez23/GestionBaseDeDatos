@@ -1,48 +1,37 @@
---Crear un cursor que muestre detallado
---E beneficiario, cuanto se le pagó y el METODO de pago correspondiente.
+--CREAR UN CURSOR QUE MUESTRE LOS TIPOS DE SEGUROS, SU CANTIDAD DE BENEFICIARIO Y LA SUMA TOTAL DE LOS SEGUROS DADOS
 
-create table DETALLE(
-	IDBENEFICIARIO INT NOT NULL,
-	BENEFICIARIO VARCHAR(30),
-	METODO_PAGO VARCHAR(30),
-	CANTIDAD_PAGO NUMERIC(10)
+--DECLARAR VARIABLES
+declare @nombre_seguro varchar (30), 
+		@beneficiario int, 
+		@total int
 
-)
-
-
---Crear un cursor que muestre detallado
---E beneficiario, cuanto se le pagó y el METODO de pago correspondiente.
-
--- CREAR EL CURSOR
-declare cursor_beneficiario cursor 
-
-for select B.IDBENEFICIARIO, B.NOMBRE, P.TIPO_PAGO,P.CANTIDAD_PAGO 
-										
-	from BENEFICIARIO AS B JOIN PAGO AS	P
-	ON B.IDPAGO = P.IDPAGO 
-	GROUP BY B.IDBENEFICIARIO, B.NOMBRE, P.TIPO_PAGO, P.CANTIDAD_PAGO
+--CREAR EL CURSOR
+declare c_recorrer cursor
+	for 
+		SELECT TIPO_NOMBRE, COUNT(NOMBRE) AS NUMERO_BENEFICIARIO, 
+				SUM(CANTIDAD_PAGO) AS CANTIDAD_TOTAL 
+		FROM TIPO_SEGURO, BENEFICIARIO, PAGO
+		WHERE BENEFICIARIO.IDBENEFICIARIO=TIPO_SEGURO.IDTIPOSEGURO AND 
+			  BENEFICIARIO.IDBENEFICIARIO=PAGO.IDPAGO
+		GROUP  BY TIPO_NOMBRE
 
 --ABRIR EL CURSOR
-OPEN cursor_beneficiario
-declare @idbeneficiario int, @nombre varchar(30), @tipo_pago varchar(30), @cantidad_pago numeric(10)
+OPEN c_recorrer
 
---EL FETCH NEXT DEVOLVERÁ LA SIGUIENTE FILA DE DATOS
-fetch next from cursor_beneficiario INTO @idbeneficiario, @nombre, @tipo_pago, @cantidad_pago
+--CAPTURA Y RECORRE LOS DATOS DEL CURSOR
+FETCH NEXT FROM c_recorrer into @nombre_seguro, @beneficiario, @total
 
---VERIFICA LA EXISTENCIA DE QUE SE LEYÓ LA FILA
-WHILE (@@FETCH_STATUS=0)
+WHILE @@FETCH_STATUS=0
 BEGIN
-	INSERT INTO DETALLE VALUES(@idbeneficiario,@nombre, @tipo_pago,@cantidad_pago);
-	FETCH NEXT FROM cursor_beneficiario INTO @idbeneficiario, @nombre, @tipo_pago, @cantidad_pago
+	
+--PROCESA EL SIGUIENTE REGISTRO DEL CURSOR
+INSERT INTO CONSULTA VALUES ( @nombre_seguro, @beneficiario, @total);
+FETCH NEXT FROM c_recorrer INTO  @nombre_seguro, @beneficiario, @total
 END
 
-CLOSE cursor_beneficiario
-DEALLOCATE cursor_beneficiario
+--CERRAR EL CURSOR Y LIBERAR EL CURSOR
+CLOSE c_recorrer
+DEALLOCATE c_recorrer
 
 
-
-
-
-
-
-select * from DETALLE
+SELECT * FROM CONSULTA
