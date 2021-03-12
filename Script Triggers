@@ -1,4 +1,4 @@
---Trigger que no permita agregar nuevos beneficiarios cuando supera la base estipulada.
+--Trigger que no permita agregar a un nuevo beneficiario si supera la base o límite estipulado.
 --crear función
 CREATE OR REPLACE FUNCTION  nuevo_benef() RETURNS TRIGGER AS
 $nuevo_benef$ 
@@ -6,8 +6,8 @@ $nuevo_benef$
     tipomaximo int;
     limite int;
 BEGIN
-   select count(*) into tipomaximo from CLIENTE where idcliente=new.idcliente;
-   select cantidad_benef into limite from BENEFICIARIO;
+   select count(*) into tipomaximo from BENEFICIARIO where idbeneficiario=new.idbeneficiario;
+   select cantidad_benef into limite from DETALLE_SEGURO;
    if ( tipomaximo >= limite ) then
    RAISE EXCEPTION 'No se puede agregar más beneficiarios, superó el límite';
    END if;
@@ -22,6 +22,5 @@ on BENEFICIARIO fOR EACH ROW
 execute procedure nuevo_benef();
 
 --INSERTAR NUEVO BENEFICIARIO
-insert into BENEFICIARIO values ('10','2','2','Martin','Valdez','Hijo','2','03/12/1999');
-
+insert into BENEFICIARIO values ('10','2','2','Martin','Valdez','Hijo','03/12/1999');
 
